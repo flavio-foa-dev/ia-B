@@ -12,11 +12,11 @@ export async function createTranscriptionRoute(app: FastifyInstance) {
       videoId: z.string().uuid()
     })
 
-   const {videoId} = paramsSchema.parse(request.params)
+    const {videoId} = paramsSchema.parse(request.params)
 
-   const bodySchema = z.object({
-    prompt: z.string(),
-   })
+    const bodySchema = z.object({
+      prompt: z.string(),
+    })
 
    const {prompt} = bodySchema.parse(request.body)
 
@@ -25,38 +25,35 @@ export async function createTranscriptionRoute(app: FastifyInstance) {
       id: videoId
     }
    })
-   console.log({pathVideo: video})
 
    const pathVideo = video.path
+   // const audioreadStream = createReadStream(pathVideo)
 
-   const audioreadStream = createReadStream(pathVideo)
-
-   console.log({"audioreadStreamOLA": audioreadStream})
-
-   try {
-    const response = await openai.audio.transcriptions.create({
-      file: audioreadStream,
-      model: "whisper-1",
-      language: "pt",
-      response_format: "json",
-      temperature: 0,
-      prompt,
-     })
+  //  try {
+  //   const response = await openai.audio.transcriptions.create({
+  //     file: audioreadStream,
+  //     model: "whisper-1",
+  //     language: "pt",
+  //     response_format: "json",
+  //     temperature: 0,
+  //     prompt,
+  //    })
+  let text = "vou falar de audio em mp3"
 
      await prisma.video.update({
       where:{
         id: videoId
       },
       data: {
-      transcript: response.text
+      transcript: text
       }
     })
 
-    return {response: response.text}
+    return {response: text}
 
-    } catch (error) {
-       console.log({"errou": error.message})
-      }
+    // } catch (error) {
+    //    console.log({"errouuuuu": error})
+    //   }
   })
 
 }
