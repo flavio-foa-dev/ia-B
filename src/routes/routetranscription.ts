@@ -25,9 +25,13 @@ export async function createTranscriptionRoute(app: FastifyInstance) {
       id: videoId
     }
    })
+   console.log({pathVideo: video})
+
    const pathVideo = video.path
-   console.log("pathVideo",pathVideo )
+
    const audioreadStream = createReadStream(pathVideo)
+
+   console.log({"audioreadStreamOLA": audioreadStream})
 
    try {
     const response = await openai.audio.transcriptions.create({
@@ -39,12 +43,20 @@ export async function createTranscriptionRoute(app: FastifyInstance) {
       prompt,
      })
 
-     return {response: response.text}
+     await prisma.video.update({
+      where:{
+        id: videoId
+      },
+      data: {
+      transcript: response.text
+      }
+    })
+
+    return {response: response.text}
 
     } catch (error) {
-       console.log(error)
+       console.log({"errou": error.message})
       }
-
   })
 
 }
