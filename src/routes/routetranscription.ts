@@ -38,7 +38,7 @@ export async function createTranscriptionRoute(app: FastifyInstance) {
   //     temperature: 0,
   //     prompt,
   //    })
-  let text = "vou falar de audio em mp3"
+  let text = "vou falar de audio em mp3" + videoId + ", prompt: " + prompt
 
      await prisma.video.update({
       where:{
