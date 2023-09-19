@@ -3,12 +3,17 @@ import { getAllPromptsRoute } from './src/routes/routePrompts';
 import { uploadVideoRoute } from './src/routes/routeUploadVideo';
 import { createTranscriptionRoute } from './src/routes/routetranscription';
 import "dotenv/config"
+import {fastifyCors} from "@fastify/cors"
 import { getAllVideosRoute } from './src/routes/routevideos';
 import { genereteCompleteRoute } from './src/routes/routeGenerateCompletion';
 
 const port = process.env.PORT || 3333
 
 const app = fastify()
+
+app.register(fastifyCors, {
+  origin: "*",
+})
 
 app.register(getAllPromptsRoute)
 app.register(getAllVideosRoute)
